@@ -22,7 +22,7 @@ module.exports = function makeRouterWithSockets (io, client) {
   router.get('/users/:username', function(req, res, next){
     var username = req.params.username;
 
-    client.query('SELECT * FROM tweets INNER JOIN users ON tweets.userid = users.id WHERE userid = $1', [username], function (err, result) {
+    client.query('SELECT tweets.content, tweets.id AS id, users.id AS userId, users.name AS name, users.pictureurl AS pictureurl FROM tweets INNER JOIN users ON tweets.userid = users.id WHERE userid = $1', [username], function (err, result) {
       if (err) return next(err); // pass errors to Express
       var tweets = result.rows;
       res.render('index', { title: 'User Page', tweets: tweets, showForm: true, username: req.params.username });
@@ -33,7 +33,7 @@ module.exports = function makeRouterWithSockets (io, client) {
   router.get('/tweets/:id', function(req, res, next){
     var tweetId = req.params.id;
 
-    client.query('SELECT * FROM tweets INNER JOIN users ON tweets.userid = users.id WHERE tweets.id = $1', [tweetId], function (err, result) {
+    client.query('SELECT tweets.content, tweets.id AS id, users.id AS userId, users.name AS name, users.pictureurl AS pictureurl FROM tweets INNER JOIN users ON tweets.userid = users.id WHERE tweets.id = $1', [tweetId], function (err, result) {
       if (err) return next(err); // pass errors to Express
       var tweets = result.rows;
       res.render('index', { title: 'User Page', tweets: tweets, showForm: false });
