@@ -52,7 +52,7 @@ module.exports = function makeRouterWithSockets (io, client) {
       user = result.rows[0];
       if(user === undefined){
       // Make new user and insert the tweet
-        client.query('INSERT INTO users (name) VALUES ($1)', [name], function (err, result) {
+        client.query('INSERT INTO users (name, pictureurl) VALUES ($1, $2)', [name, "https://blog.twitter.com/sites/all/themes/gazebo/img/twitter-bird-white-on-blue.png"], function (err, result) {
           if (err) return next(err); // pass errors to Express
           client.query("SELECT * FROM users WHERE name = $1", [name], function (err, result) {
             if (err) return next(err); // pass errors to Express
